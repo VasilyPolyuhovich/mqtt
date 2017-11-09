@@ -38,7 +38,7 @@ enum MQTTConnAckResponse: UInt8, Error {
 }
 
 extension Data {
-    public var bytes: Array<UInt8> {
+    public var mqtt_bytes: Array<UInt8> {
             return Array(self)
     }
         
