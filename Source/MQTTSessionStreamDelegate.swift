@@ -77,17 +77,16 @@ class MQTTSessionStream: NSObject {
     
     fileprivate func receiveData(_ data: Data) {
         guard data.mqtt_bytes.count > 0 else { return }
-        
-        let header = MQTTPacketFixedHeader(networkByte: data[0])
-        
-        // Max Length is 2^28 = 268,435,455 (256 MB)
-        
-        //let totalLength = data[1]
-        
+        var bytes = data.mqtt_bytes
+        let header = MQTTPacketFixedHeader(networkByte: bytes[0])
+        let totalLength = bytes[1]
         var responseData = Data()
-        if data.mqtt_bytes.count > 2 {
-            responseData = Data.init(bytes: data.mqtt_bytes[2...data.mqtt_bytes.count])
+        
+        if totalLength > 0 && bytes.count > 0  {
+            let payload = bytes[2...bytes.endIndex]
+            responseData = Data(bytes: payload)
         }
+        
         delegate?.mqttReceived(responseData, header: header, in: self)
     }
 }

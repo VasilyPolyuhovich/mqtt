@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name        = "MQTT"
-  s.version     = "1.1"
+  s.version     = "1.2"
   s.summary     = "MQTT v3.1.1 client library for iOS written with Swift"
   s.homepage    = "https://github.com/VasilyPolyuhovich/mqtt"
   s.license     = { :type => "MIT" }

@@ -1,7 +1,7 @@
 import Foundation
 
 class MQTTPublishPacket: MQTTPacket {
-
+    
     let messageID: UInt16
     let message: MQTTPubMsg
     
@@ -33,13 +33,19 @@ class MQTTPublishPacket: MQTTPacket {
     }
     
     init(header: MQTTPacketFixedHeader, networkData: Data) {
+        let bytes = networkData.mqtt_bytes
+        let subBytes = bytes[3...bytes.endIndex]
+        let payloadData = Data(bytes: subBytes)
+        let payloadString = String(data: payloadData, encoding: .utf8)!
+        let endOftopic = payloadString.index(of: "{") ?? payloadString.endIndex
         
-        let topicLength = 256 * Int(networkData[0]) + Int(networkData[1])
-        let topicData = networkData.subdata(in: 2..<topicLength+2)
-        let topic = String(data: topicData, encoding: .utf8)!
+        let topic = String(payloadString[payloadString.startIndex..<endOftopic])
+        
+        let payloadBody = String(payloadString[endOftopic..<payloadString.endIndex])
         
         let qos = MQTTQoS(rawValue: header.flags & 0x06)!
-        var payload = networkData.subdata(in: 2+topicLength..<networkData.endIndex)
+        let stringData = [UInt8](payloadBody.utf8)
+        var payload = Data.init(bytes: stringData)
         
         if qos != .atMostOnce {
             messageID = 256 * UInt16(payload[0]) + UInt16(payload[1])
