@@ -83,7 +83,7 @@ class MQTTSessionStream: NSObject {
         var responseData = Data()
         
         if totalLength > 0 && bytes.count > 0  {
-            let payload = bytes[2...bytes.endIndex]
+            let payload = bytes[2..<bytes.endIndex]
             responseData = Data(bytes: payload)
         }
         
