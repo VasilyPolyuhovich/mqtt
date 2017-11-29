@@ -34,7 +34,7 @@ class MQTTPublishPacket: MQTTPacket {
     
     init(header: MQTTPacketFixedHeader, networkData: Data) {
         let bytes = networkData.mqtt_bytes
-        let subBytes = bytes[3...bytes.endIndex]
+        let subBytes = bytes[3..<bytes.endIndex]
         let payloadData = Data(bytes: subBytes)
         let payloadString = String(data: payloadData, encoding: .utf8)!
         let endOftopic = payloadString.index(of: "{") ?? payloadString.endIndex
