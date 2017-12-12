@@ -34,22 +34,23 @@ class MQTTPublishPacket: MQTTPacket {
     
     init(header: MQTTPacketFixedHeader, networkData: Data) {
         let bytes = networkData.mqtt_bytes
-        let subBytes = bytes[3..<bytes.endIndex]
+        let topicLength = Int(networkData[0]) + Int(networkData[1]) + Int(networkData[2])
+        let topicBytes = bytes[3..<topicLength + 2]
+        let topicData = Data(bytes: topicBytes)
+        let startPosition = topicLength + 4
+        let subBytes = bytes[startPosition..<bytes.endIndex]
         let payloadData = Data(bytes: subBytes)
-        let payloadString = String(data: payloadData, encoding: .utf8)!
-        let endOftopic = payloadString.index(of: "{") ?? payloadString.endIndex
         
-        let topic = String(payloadString[payloadString.startIndex..<endOftopic])
-        
-        let payloadBody = String(payloadString[endOftopic..<payloadString.endIndex])
+        let topic = String(data: topicData, encoding: .utf8) ?? ""
         
         let qos = MQTTQoS(rawValue: header.flags & 0x06)!
-        let stringData = [UInt8](payloadBody.utf8)
-        var payload = Data.init(bytes: stringData)
+        var payload = payloadData
         
         if qos != .atMostOnce {
-            messageID = 256 * UInt16(payload[0]) + UInt16(payload[1])
-            payload = payload.subdata(in: 2..<payload.endIndex)
+            let msgId = bytes[startPosition-1..<startPosition]
+            let msgData = Data.init(bytes: msgId)
+            messageID = 256 * UInt16(msgData[0]) //+ UInt16(payloadData[1])
+            payload = payloadData
         } else {
             messageID = 0
         }
