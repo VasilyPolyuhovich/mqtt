@@ -1,11 +1,11 @@
 PODS:
-  - Starscream (3.0.2)
+  - Starscream (3.0.3)
 
 DEPENDENCIES:
   - Starscream (~> 3.0.2)
 
 SPEC CHECKSUMS:
-  Starscream: b512c62f6706421221b5ceb2ba01a9f58aca5bea
+  Starscream: dfb1b3f39506717ee52b67fb48de0c8269504cbc
 
 PODFILE CHECKSUM: 5a9b33bd792b8dec8d7e33187283265a48411aff
 

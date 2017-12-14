@@ -82,9 +82,12 @@ class MQTTSessionStream: NSObject {
         let totalLength = bytes[1]
         var responseData = Data()
         
-        if totalLength > 0 && bytes.count > 0  {
-            let payload = bytes[2..<bytes.endIndex]
-            responseData = Data(bytes: payload)
+        if totalLength > 2  {
+            let payload = [UInt8](bytes[3..<bytes.endIndex])
+            responseData = Data.init(bytes: payload)
+        } else {
+            let payload = [UInt8](bytes[2..<bytes.endIndex])
+            responseData = Data.init(bytes: payload)
         }
         
         delegate?.mqttReceived(responseData, header: header, in: self)

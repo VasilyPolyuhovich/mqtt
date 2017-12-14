@@ -37,6 +37,27 @@ enum MQTTConnAckResponse: UInt8, Error {
     case notAuthorized          = 0x05
 }
 
+extension UInt16 {
+    // Most Significant Byte (MSB)
+    private var highByte: UInt8 {
+        return UInt8( (self & 0xFF00) >> 8)
+    }
+    // Least Significant Byte (LSB)
+    private var lowByte: UInt8 {
+        return UInt8(self & 0x00FF)
+    }
+    
+    var hlBytes: [UInt8] {
+        return [highByte, lowByte]
+    }
+}
+
+extension UInt8 {
+    func bitAt(_ offset: UInt8) -> UInt8 {
+        return (self >> offset) & 0x01
+    }
+}
+
 extension Data {
     public var mqtt_bytes: Array<UInt8> {
             return Array(self)
