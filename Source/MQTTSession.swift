@@ -54,6 +54,7 @@ open class MQTTSession: MQTTSessionStreamDelegate {
         let msgID = nextMessageID()
         let subscribePacket = MQTTSubPacket(topics: topics, messageID: msgID)
         if send(subscribePacket) {
+            completion?(true, MQTTSessionError.none) //WARNING: tricky a bit, but for some reasond it don't have a reqular completion (it goes with other id)
             messagesCompletionBlocks[msgID] = completion
         } else {
             completion?(false, MQTTSessionError.socketError)
