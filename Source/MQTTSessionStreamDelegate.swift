@@ -69,7 +69,9 @@ class MQTTSessionStream: NSObject {
         let networkPacket = packet.networkPacket()
         
         socket?.write(data: networkPacket, completion: {
-            print("sent \(packet.header.packetType)")
+            #if DEBUG
+                print("sent \(packet.header.packetType)")
+            #endif
         })
         
         return networkPacket.count
