@@ -93,7 +93,7 @@ open class MQTTSession: MQTTSessionStreamDelegate {
         }
         
         keepAliveTimer = Timer(timeInterval: Double(keepAlive), target: self, selector: #selector(MQTTSession.keepAliveTimerFired), userInfo: nil, repeats: true)
-        RunLoop.main.add(keepAliveTimer, forMode: .defaultRunLoopMode)
+        RunLoop.main.add(keepAliveTimer, forMode: RunLoop.Mode.default)
         
         // Create Connect Packet
 

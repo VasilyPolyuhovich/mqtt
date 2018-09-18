@@ -2,10 +2,10 @@ import Foundation
 
 open class MQTTPubMsg {
     
-    open let topic: String
-    open let payload: Data
-    open let retain: Bool
-    open let QoS: MQTTQoS
+    public let topic: String
+    public let payload: Data
+    public let retain: Bool
+    public let QoS: MQTTQoS
     
     public init(topic: String, payload: Data, retain: Bool, QoS: MQTTQoS) {
         self.topic = topic
